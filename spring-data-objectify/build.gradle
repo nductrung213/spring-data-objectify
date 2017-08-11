@@ -1,0 +1,66 @@
+buildscript {
+    ext{
+        appengineVersion = '1.9.54'
+    }
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.google.appengine:gradle-appengine-plugin:' + appengineVersion
+    }
+}
+
+repositories {
+    jcenter();
+    mavenLocal();
+    mavenCentral();
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+// apply plugin: 'war'
+// apply plugin: 'appengine'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+    ext {
+        appengineVersion = '1.9.54'
+        springBootVersion = '1.5.6.RELEASE'
+    }
+
+    compile 'com.google.appengine:appengine-api-1.0-sdk:' + appengineVersion
+    compile 'com.googlecode.objectify:objectify:5.1.12'
+    compile 'org.springframework.data:spring-data-commons:1.13.6.RELEASE'
+    compile 'org.springframework:spring-context:4.3.10.RELEASE'
+    compile 'org.springframework:spring-tx:4.3.10.RELEASE'
+//    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.0'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.google.appengine:appengine-testing:' + appengineVersion
+    testCompile 'com.google.appengine:appengine-api-stubs:' + appengineVersion
+    testCompile 'org.springframework.boot:spring-boot-starter-test:' + springBootVersion
+}
+
+test {
+    dependsOn 'cleanTest'
+}
+
+// Install to Local Maven repository: 
+// $ gradle install
+group = 'vn.khtt'
+version = '0.1.0'
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}   
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
