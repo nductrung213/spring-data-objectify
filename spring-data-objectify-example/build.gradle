@@ -37,15 +37,9 @@ dependencies {
     compile 'com.google.appengine:appengine-api-1.0-sdk:' + appengineVersion
     compile 'javax.servlet:javax.servlet-api:3.1.0'
     compile 'com.googlecode.objectify:objectify:5.1.12'
-    compile ('org.springframework.boot:spring-boot-starter-thymeleaf'){
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-        exclude group: 'org.slf4j', module: 'jul-to-slf4j'
-    }
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'org.springframework.boot:spring-boot-starter-data-rest'
-//    compile 'org.springframework.data:spring-data-commons:1.13.6.RELEASE'
-//    compile 'org.springframework:spring-context:4.3.10.RELEASE'
-//    compile 'org.springframework:spring-tx:4.3.10.RELEASE'
-    // Force to use jackson:2.9.0
+    // Use jackson:2.9.0
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
     compile 'com.fasterxml.jackson.core:jackson-core:2.9.0'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.0'
@@ -67,10 +61,15 @@ war {
     from 'src/main/resources/static'
 
     // Exclude unnecessary jars
-    rootSpec.exclude("**/hibernate-validator-*.jar")
-    rootSpec.exclude("**/validation-api-*.jar")
-    rootSpec.exclude("**/tomcat-embed-*.jar")
-    rootSpec.exclude("**/jul-to-slf4j-*.jar")
+//    rootSpec.exclude("**/hibernate-validator-*.jar")
+//    rootSpec.exclude("**/validation-api-*.jar")
+//    rootSpec.exclude("**/tomcat-embed-*.jar")
+//    rootSpec.exclude("**/jul-to-slf4j-*.jar")
+}
+
+configurations.all{
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    exclude group: 'org.slf4j', module: 'jul-to-slf4j'
 }
 
 appengine {
