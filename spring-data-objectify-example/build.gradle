@@ -1,0 +1,77 @@
+buildscript {
+    ext{
+        appengineVersion = '1.9.54'
+        springBootVersion = '1.5.6.RELEASE'
+    }
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.google.appengine:gradle-appengine-plugin:' + appengineVersion
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:' + springBootVersion
+    }
+}
+
+repositories {
+    jcenter();
+    mavenLocal();
+    mavenCentral();
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'appengine'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+    ext {
+        appengineVersion = '1.9.54'
+        springBootVersion = '1.5.6.RELEASE'
+    }
+
+    compile 'com.google.appengine:appengine-api-1.0-sdk:' + appengineVersion
+    compile 'javax.servlet:javax.servlet-api:3.1.0'
+    compile 'com.googlecode.objectify:objectify:5.1.12'
+    compile ('org.springframework.boot:spring-boot-starter-thymeleaf'){
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+        exclude group: 'org.slf4j', module: 'jul-to-slf4j'
+    }
+    compile 'org.springframework.boot:spring-boot-starter-data-rest'
+//    compile 'org.springframework.data:spring-data-commons:1.13.6.RELEASE'
+//    compile 'org.springframework:spring-context:4.3.10.RELEASE'
+//    compile 'org.springframework:spring-tx:4.3.10.RELEASE'
+    // Force to use jackson:2.9.0
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.9.0'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.0'
+
+    // TEST JPA
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'com.h2database:h2'
+
+    compile project (':spring-data-objectify')
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.google.appengine:appengine-testing:' + appengineVersion
+    testCompile 'com.google.appengine:appengine-api-stubs:' + appengineVersion
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+war {
+    // Also copy /static to ROOT directory of War
+    from 'src/main/resources/static'
+
+    // Exclude unnecessary jars
+    rootSpec.exclude("**/hibernate-validator-*.jar")
+    rootSpec.exclude("**/validation-api-*.jar")
+    rootSpec.exclude("**/tomcat-embed-*.jar")
+    rootSpec.exclude("**/jul-to-slf4j-*.jar")
+}
+
+test {
+    dependsOn 'cleanTest'
+}
